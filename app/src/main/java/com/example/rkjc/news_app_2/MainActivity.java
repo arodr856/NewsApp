@@ -2,9 +2,6 @@ package com.example.rkjc.news_app_2;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.CursorLoader;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -18,12 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CursorAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.net.URL;
+import com.example.rkjc.news_app_2.database.NewsItem;
+import com.example.rkjc.news_app_2.utils.JsonUtils;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -55,18 +50,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.i(TAG, "In savedInstanceState not null check. . .");
             String newsResults = savedInstanceState.getString(NEWS_RESULTS);
             populateRecyclerView(newsResults);
-        } else{
-            Log.i(TAG, "Right before savedInstanceState not null check. . .");
-            LoaderManager loaderManager = getSupportLoaderManager();
-            Loader<String> newsHolder = loaderManager.getLoader(LOADER_ID);
-            if(newsHolder == null){
-                Log.i(TAG, "News holder was null . . .");
-                loaderManager.initLoader(LOADER_ID, null, this).forceLoad();
-            }else{
-                Log.i(TAG, "News holder was not null . . .");
-                loaderManager.restartLoader(LOADER_ID, null, this).forceLoad();
-            }
         }
+//        else{
+//            Log.i(TAG, "Right before savedInstanceState not null check. . .");
+//            LoaderManager loaderManager = getSupportLoaderManager();
+//            Loader<String> newsHolder = loaderManager.getLoader(LOADER_ID);
+//            if(newsHolder == null){
+//                Log.i(TAG, "News holder was null . . .");
+//                loaderManager.initLoader(LOADER_ID, null, this).forceLoad();
+//            }else{
+//                Log.i(TAG, "News holder was not null . . .");
+//                loaderManager.restartLoader(LOADER_ID, null, this).forceLoad();
+//            }
+//        }
 
     }
 

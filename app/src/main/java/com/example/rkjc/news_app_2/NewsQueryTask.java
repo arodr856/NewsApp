@@ -1,7 +1,8 @@
 package com.example.rkjc.news_app_2;
 
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.example.rkjc.news_app_2.utils.NetworkUtils;
 
 import java.io.IOException;
 

@@ -1,6 +1,6 @@
-package com.example.rkjc.news_app_2;
+package com.example.rkjc.news_app_2.utils;
 
-import android.util.Log;
+import com.example.rkjc.news_app_2.database.NewsItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
