@@ -1,5 +1,6 @@
 package com.example.rkjc.news_app_2.database;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -9,11 +10,17 @@ public class NewsItem {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+    @ColumnInfo(name = "author")
     private String author;
+    @ColumnInfo(name = "title")
     private String title;
+    @ColumnInfo(name = "description")
     private String description;
+    @ColumnInfo(name = "url")
     private String url;
+    @ColumnInfo(name = "urlToImage")
     private String urlToImage;
+    @ColumnInfo(name = "publishedAt")
     private String publishedAt;
 
     @Ignore

@@ -14,20 +14,26 @@ import android.widget.TextView;
 import com.example.rkjc.news_app_2.database.NewsItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerViewAdapter.NewsViewHolder> {
 
     private static final String TAG = "NewsRecyclerViewAdapter";
-    private ArrayList<NewsItem> newsItems;
+    private List<NewsItem> newsItems;
     private Context context;
 
-    public NewsRecyclerViewAdapter(ArrayList<NewsItem> newsItems, Context context) {
+    public NewsRecyclerViewAdapter(Context context, NewsItemViewModel viewModel) {
         this.newsItems = newsItems;
         this.context = context;
     }
 
-    public ArrayList<NewsItem> getNewsItems() {
+    public NewsRecyclerViewAdapter(List<NewsItem> newsItems, Context context) {
+        this.newsItems = newsItems;
+        this.context = context;
+    }
+
+    public List<NewsItem> getNewsItems() {
         return newsItems;
     }
 
@@ -46,6 +52,11 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
 
         holder.bind(position);
 
+    }
+
+    public void setNewsItems(List<NewsItem> items){
+        this.newsItems = items;
+        notifyDataSetChanged();
     }
 
 
