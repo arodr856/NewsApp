@@ -26,9 +26,9 @@ public class NewsItemViewModel extends AndroidViewModel {
         return data;
     }
 
-    public List<NewsItem> sync(){
+    public void sync(){
         Log.i("NewsItemViewModel", "in sync");
-        return this.repo.syncDB();
+        this.repo.syncDB();
     }
 
 }

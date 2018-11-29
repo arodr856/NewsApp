@@ -44,15 +44,8 @@ public class NewsItemsRepository {
         return this.allNewsItems;
     }
 
-    public List<NewsItem> syncDB(){
-        try {
-           return  new syncDatabase(mNewsItemDao, this, this.application).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public void syncDB(){
+        new syncDatabase(mNewsItemDao, this, this.application).execute();
     }
 
 
@@ -85,7 +78,7 @@ public class NewsItemsRepository {
     }
 
 
-    public static class syncDatabase extends AsyncTask<Void, Void, List<NewsItem>>{
+    public static class syncDatabase extends AsyncTask<Void, Void, String>{
 
         private NewsItemDao newsItemDao;
         private NewsItemsRepository repo;
@@ -98,22 +91,29 @@ public class NewsItemsRepository {
         }
 
         @Override
-        protected List<NewsItem> doInBackground(Void... voids) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
 
             String json = null;
-            List<NewsItem> items = null;
             try {
                 json = NetworkUtils.getResponseFromHttpUrl(NetworkUtils.buildURL());
-                items = JsonUtils.parseNews(json);
                 newsItemDao.clearAll();
-                newsItemDao.insert(items);
+                newsItemDao.insert(JsonUtils.parseNews(json));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return items;
+            return json;
         }
 
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
     }
 
 

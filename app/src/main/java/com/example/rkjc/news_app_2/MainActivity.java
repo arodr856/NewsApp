@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity{
 
         switch (item.getItemId()){
             case R.id.get_item:
-                newsItems = this.newsViewModel.sync();
+                this.newsViewModel.sync();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
