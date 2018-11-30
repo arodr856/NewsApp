@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rkjc.news_app_2.database.NewsItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,12 +73,14 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
         TextView title;
         TextView description;
         TextView date;
+        ImageView imageView;
 
         public NewsViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             description = (TextView) itemView.findViewById(R.id.description);
             date = (TextView) itemView.findViewById(R.id.date);
+            imageView = (ImageView) itemView.findViewById(R.id.news_img);
         }
 
         void bind(int position){
@@ -85,6 +89,12 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
             title.setText("Title: " + item.getTitle());
             description.setText("Description: " + item.getDescription());
             date.setText("Date: " + item.getPublishedAt());
+            String imageUrl = newsItems.get(position).getUrlToImage();
+            if(imageUrl != null){
+                Picasso.get()
+                        .load(imageUrl)
+                        .into(imageView);
+            }
             // set on click listener
             itemView.setOnClickListener(this);
         }

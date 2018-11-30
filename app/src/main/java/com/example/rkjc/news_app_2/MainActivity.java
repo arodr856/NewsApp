@@ -2,8 +2,10 @@ package com.example.rkjc.news_app_2;
 
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -20,6 +22,8 @@ import android.view.MenuItem;
 
 import com.example.rkjc.news_app_2.database.NewsItem;
 import com.example.rkjc.news_app_2.utils.JsonUtils;
+import com.example.rkjc.news_app_2.utils.NotificationsUtils;
+import com.example.rkjc.news_app_2.utils.ScheduleNotificationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        ScheduleNotificationUtil.scheduleSyncReminder(this );
+
     } /* onCreate */
 
     @Override
@@ -84,6 +90,12 @@ public class MainActivity extends AppCompatActivity{
         switch (item.getItemId()){
             case R.id.get_item:
                 this.newsViewModel.sync();
+                return true;
+            case R.id.refresh_test:
+                NotificationsUtils.remindUserToSync(this);
+//                Intent refreshIntent = new Intent(this, NewsReminderIntentService.class);
+//                refreshIntent.setAction(ReminderTasks.REFRESH_NEWS);
+//                startService(refreshIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

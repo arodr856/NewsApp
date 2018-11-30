@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class NewsItemsRepository {
-    private NewsItemDao mNewsItemDao;
+    private static NewsItemDao mNewsItemDao;
     private LiveData<List<NewsItem>> allNewsItems;
     private Application application;
 
@@ -39,13 +39,20 @@ public class NewsItemsRepository {
         allNewsItems = mNewsItemDao.loadAllNewsItems();
     }
 
+    public NewsItemsRepository(Context context){
+        AppDatabase db = AppDatabase.getsInstance(context);
+        this.application = application;
+        mNewsItemDao = db.newsItemDao();
+        allNewsItems = mNewsItemDao.loadAllNewsItems();
+    }
+
     public LiveData<List<NewsItem>> getAllNewsItems(){
         new getAllAsyncTask(mNewsItemDao, this).execute();
         return this.allNewsItems;
     }
 
-    public void syncDB(){
-        new syncDatabase(mNewsItemDao, this, this.application).execute();
+    public static void syncDB(){
+        new syncDatabase(mNewsItemDao).execute();
     }
 
 
@@ -58,7 +65,6 @@ public class NewsItemsRepository {
 
         private NewsItemDao newsItemDao;
         private NewsItemsRepository repo;
-        private Application application;
 
         getAllAsyncTask(NewsItemDao newsItemDao, NewsItemsRepository repo){
             this.newsItemDao = newsItemDao;
@@ -82,10 +88,9 @@ public class NewsItemsRepository {
 
         private NewsItemDao newsItemDao;
         private NewsItemsRepository repo;
-        private Application application;
 
-        syncDatabase(NewsItemDao newsItemDao, NewsItemsRepository repo, Application application){
-            this.application = application;
+
+        syncDatabase(NewsItemDao newsItemDao){
             this.newsItemDao = newsItemDao;
             this.repo = repo;
         }
