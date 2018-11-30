@@ -2,6 +2,10 @@ package com.example.rkjc.news_app_2;
 
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -18,12 +22,15 @@ import android.view.MenuItem;
 
 import com.example.rkjc.news_app_2.database.NewsItem;
 import com.example.rkjc.news_app_2.utils.JsonUtils;
+import com.example.rkjc.news_app_2.utils.NotificationsUtils;
+import com.example.rkjc.news_app_2.utils.ScheduleNotificationUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "MainActivity";
 
@@ -32,8 +39,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int LOADER_ID = 1;
     private RecyclerView recyclerView;
     private NewsRecyclerViewAdapter recyclerViewAdapter;
-    private ArrayList<NewsItem> newsItems = new ArrayList<>();
+    private List<NewsItem> newsItems = new ArrayList<>();
     private String newsStrings;
+    private NewsItemViewModel newsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,30 +49,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.news_recyclerview);
+
+        this.newsViewModel = ViewModelProviders.of(this).get(NewsItemViewModel.class);
+
         recyclerViewAdapter = new NewsRecyclerViewAdapter(newsItems, this);
 
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if(savedInstanceState != null && savedInstanceState.getString(NEWS_RESULTS) != null){
-            Log.i(TAG, "In savedInstanceState not null check. . .");
-            String newsResults = savedInstanceState.getString(NEWS_RESULTS);
-            populateRecyclerView(newsResults);
-        }
-//        else{
-//            Log.i(TAG, "Right before savedInstanceState not null check. . .");
-//            LoaderManager loaderManager = getSupportLoaderManager();
-//            Loader<String> newsHolder = loaderManager.getLoader(LOADER_ID);
-//            if(newsHolder == null){
-//                Log.i(TAG, "News holder was null . . .");
-//                loaderManager.initLoader(LOADER_ID, null, this).forceLoad();
-//            }else{
-//                Log.i(TAG, "News holder was not null . . .");
-//                loaderManager.restartLoader(LOADER_ID, null, this).forceLoad();
-//            }
-//        }
+        newsViewModel.getData().observe(this, new Observer<List<NewsItem>>() {
+            @Override
+            public void onChanged(@Nullable List<NewsItem> newsItems) {
+                Log.i("MainActivity", "In observer");
+                recyclerViewAdapter.setNewsItems(newsItems);
+            }
+        });
 
-    }
+        ScheduleNotificationUtil.scheduleSyncReminder(this );
+
+    } /* onCreate */
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -86,76 +89,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         switch (item.getItemId()){
             case R.id.get_item:
-                LoaderManager loaderManager = getSupportLoaderManager();
-                Loader<String> newsHolder = loaderManager.getLoader(LOADER_ID);
-                if(newsHolder == null){
-                    Log.i(TAG, "News holder was null . . .");
-                    loaderManager.initLoader(LOADER_ID, null, this).forceLoad();
-                }else{
-                    Log.i(TAG, "News holder was not null . . .");
-                    loaderManager.restartLoader(LOADER_ID, null, this).forceLoad();
-                }
+                this.newsViewModel.sync();
+                return true;
+            case R.id.refresh_test:
+                NotificationsUtils.remindUserToSync(this);
+//                Intent refreshIntent = new Intent(this, NewsReminderIntentService.class);
+//                refreshIntent.setAction(ReminderTasks.REFRESH_NEWS);
+//                startService(refreshIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    private void populateRecyclerView(String jsonString){
-        Log.i(TAG, "starting populateRecyclerView. . .");
-        newsItems = JsonUtils.parseNews(jsonString);
-        recyclerViewAdapter.getNewsItems().addAll(newsItems);
-        recyclerViewAdapter.notifyDataSetChanged();
-        Log.i(TAG, "finishing populateRecyclerView. . .");
-    }
-
-
-    @SuppressLint("StaticFieldLeak")
-    @NonNull
-    @Override
-    public Loader<String> onCreateLoader(int id, @Nullable Bundle args) {
-        return new AsyncTaskLoader<String>(this) {
-
-
-            @Override
-            protected void onStartLoading() {
-                super.onStartLoading();
-            }
-
-            @Override
-            public String loadInBackground() {
-                Log.i(TAG, "starting loadInBackground. . .");
-                NewsQueryTask nqt = new NewsQueryTask();
-                nqt.execute();
-                String jsonString;
-                try {
-                    jsonString = nqt.get();
-//                    newsStrings = jsonString;
-                    Log.i(TAG, jsonString);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                    return null;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-                Log.i(TAG, "finishing in loadInBackground. . .");
-                return jsonString;
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<String> loader, String data) {
-        Log.i(TAG, "starting onLoadFinished. . .");
-        newsStrings = data;
-        populateRecyclerView(data);
-        Log.i(TAG, "finishing onLoadFinished. . .");
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<String> loader) {
-
-    }
-
 }

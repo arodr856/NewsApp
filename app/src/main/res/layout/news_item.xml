@@ -1,32 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/border"
-    android:padding="10dip">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp"
+    android:orientation="vertical">
 
-
-    <TextView
-        android:id="@+id/title"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="hello1"
-        />
+        card_view:cardBackgroundColor="#D3D3D3"
+        card_view:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="hello2"
-        />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp">
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="hello3"
-        />
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/news_img"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="8dp"
+                android:scaleType="fitXY"/>
 
-    
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title"
+                android:layout_toRightOf="@+id/news_img"
+                android:textSize="16sp"
+                android:layout_marginTop="6sp"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_toRightOf="@id/news_img"
+                android:textSize="16sp"
+                android:layout_marginTop="6sp"/>
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/news_img"
+                android:textAllCaps="false" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
 </LinearLayout>

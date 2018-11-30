@@ -7,5 +7,10 @@
         android:orderInCategory="1"
         android:title="Refresh"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/refresh_test"
+        android:orderInCategory="2"
+        android:title="Refresh Test"
+        app:showAsAction="ifRoom"/>
 
 </menu>
