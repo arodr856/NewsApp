@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -18,38 +19,51 @@
             android:layout_height="wrap_content"
             android:padding="1dp">
 
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:id="@+id/news_img"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="8dp"
-                android:scaleType="fitXY"/>
-
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/title"
-                android:layout_toRightOf="@+id/news_img"
-                android:textSize="16sp"
-                android:layout_marginTop="6sp"/>
+                android:id="@+id/inner_layout"
+                >
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_toRightOf="@id/news_img"
-                android:textSize="16sp"
-                android:layout_marginTop="6sp"/>
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6sp"
+                    android:layout_toEndOf="@id/news_img"
+                    android:layout_below="@id/title"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_toEndOf="@+id/news_img"
+                    android:textSize="25sp" />
+
+                <ImageView
+                    android:id="@+id/news_img"
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="8dp"
+                    android:scaleType="fitXY" />
+
+
+
+            </RelativeLayout>
+
+
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/news_img"
-                android:textAllCaps="false" />
+                android:layout_below="@id/inner_layout"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
 
         </RelativeLayout>
 

@@ -4,6 +4,7 @@ package com.example.rkjc.news_app_2;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
@@ -17,6 +18,7 @@ public class NewsNotificationJobService extends JobService {
         mbackgroundTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
+                Log.i("NewsNotificationJobService", "in do in background. . .");
                 Context context = NewsNotificationJobService.this;
                 NewsItemsRepository repo = new NewsItemsRepository(context);
 //                NewsItemsRepository.syncDB();
